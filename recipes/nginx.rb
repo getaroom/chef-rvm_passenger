@@ -24,52 +24,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe "nginx::source"
 include_recipe "rvm_passenger"
 
-configure_flags = node['nginx']['configure_flags'].empty? ? 'none' : node['nginx']['configure_flags'].join(" ")
-nginx_install   = node['nginx']['source']['prefix']
-nginx_version   = node['nginx']['version']
-nginx_dir       = node['nginx']['dir']
-archive_cache   = node['nginx']['archive_cache'] || Chef::Config['file_cache_path']
+node.run_state['nginx_configure_flags'] =
+  node.run_state['nginx_configure_flags'] | ["--add-module=#{node['rvm_passenger']['root_path']}/ext/nginx"]
 
-remote_file "#{archive_cache}/nginx-#{nginx_version}.tar.gz" do
-  source "http://nginx.org/download/nginx-#{nginx_version}.tar.gz"
-  action  :create_if_missing
-end
-
-bash "extract_nginx_source" do
-  cwd     archive_cache
-  code    %{tar zxf nginx-#{nginx_version}.tar.gz}
-
-  not_if  %{test -d #{archive_cache}/nginx-#{nginx_version}}
-end
-
-rvm_shell "build passenger_nginx_module" do
-  ruby_string   node['rvm_passenger']['rvm_ruby']
-  code          <<-INSTALL
-    passenger-install-nginx-module \
-      --auto --prefix=#{nginx_install} \
-      --nginx-source-dir=#{archive_cache}/nginx-#{nginx_version} \
-      --extra-configure-flags='#{configure_flags}'
-  INSTALL
-  notifies      :restart, resources(:service => "nginx")
-
-  not_if        <<-CHECK
-    #{nginx_install}/sbin/nginx -V 2>&1 | \
-      grep "`cat /tmp/passenger_root_path`/ext/nginx"
-  CHECK
-end
-
-template "#{nginx_dir}/conf.d/passenger.conf" do
+template "#{node['nginx']['dir']}/conf.d/passenger.conf" do
   source    "passenger_nginx.conf.erb"
   owner     "root"
   group     "root"
   mode      "0644"
-  notifies  :restart, resources(:service => "nginx")
-end
-
-# Oh the humanity this should not be required.
-file "/tmp/passenger_root_path" do
-  action  :delete
+  notifies  :restart, "service[nginx]"
 end

@@ -43,16 +43,7 @@ rvm_gem "passenger" do
   version     passenger_version
 end
 
-# calculate the root_path attribute if it isn't set. This is evaluated in the
-# execute phase because the RVM environment is queried and the Ruby must be
-# installed.
-ruby_block "Calculate node['rvm_passenger']['root_path']" do
-  block do
-    Chef::RVMPassenger::CalculateAttribute.new(node).for_root_path
-  end
-
-  not_if  { node['rvm_passenger']['root_path'] }
-end
+node.default['rvm_passenger']['root_path'] = "/usr/local/rvm/gems/#{node['rvm_passenger']['rvm_ruby']}/gems/passenger-#{node['rvm_passenger']['version']}"
 
 # calculate the ruby_wrapper attribute if it isn't set. This is evaluated in
 # the execute phase because the RVM environment is queried and the Ruby must be

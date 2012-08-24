@@ -108,7 +108,9 @@ Installs passenger as an apache2 module. Requires the `apache2` recipe.
 
 ### <a name="recipes-nginx"></a> nginx
 
-Installs passenger as an nginx module. Requires the `nginx::source` recipe.
+Installs passenger as an nginx module. Configure as an nginx module:
+
+    node['nginx']['source']['modules'] = ["rvm_passenger::nginx"]
 
 ## <a name="attributes"></a> Attributes
 
