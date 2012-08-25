@@ -26,6 +26,8 @@ default['rvm_passenger']['version']      = nil
 # unless overriden
 default['rvm_passenger']['rvm_ruby']     = nil
 
+default['rvm_passenger']['pool_idle_time'] = 300
+
 case platform
 when "suse"
   node.set['rvm_passenger']['common_pkgs']  = %w{libcurl-devel}

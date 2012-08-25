@@ -137,6 +137,12 @@ Default is the default RVM Ruby in a gemset called "passenger", i.e.
 
 Optionally override the full path to the root of the installed passenger gem.
 
+### <a name="attributes-pool-idle-time"></a> pool_idle_time
+
+The maximum number of seconds that an application process may be idle.
+
+Default is 300.
+
 ### <a name="attributes-module-path"></a> module_path
 
 Optionallly override the full path to the Apache2 module.
