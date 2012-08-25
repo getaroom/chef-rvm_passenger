@@ -43,6 +43,12 @@ rvm_gem "passenger" do
   version     passenger_version
 end
 
+rvm_wrapper "passenger" do
+  prefix node['rvm_passenger']['wrapper_prefix']
+  binaries %w(passenger passenger-config passenger-memory-stats passenger-status)
+  ruby_string rvm_ruby
+end
+
 node.default['rvm_passenger']['root_path'] = "/usr/local/rvm/gems/#{node['rvm_passenger']['rvm_ruby']}/gems/passenger-#{node['rvm_passenger']['version']}"
 
 # calculate the ruby_wrapper attribute if it isn't set. This is evaluated in
