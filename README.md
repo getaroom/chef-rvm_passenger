@@ -137,6 +137,12 @@ Default is the default RVM Ruby in a gemset called "passenger", i.e.
 
 Optionally override the full path to the root of the installed passenger gem.
 
+### <a name="attributes-max-pool-size"></a> max_pool_size
+
+The maximum number of application processes that may simultanously exist.
+
+Default is 6.
+
 ### <a name="attributes-pool-idle-time"></a> pool_idle_time
 
 The maximum number of seconds that an application process may be idle.

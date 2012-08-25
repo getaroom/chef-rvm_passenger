@@ -1,3 +1,4 @@
 passenger_root <%= node[:rvm_passenger][:root_path] %>;
 passenger_ruby <%= node[:rvm_passenger][:ruby_wrapper] %>;
+passenger_max_pool_size <%= node[:rvm_passenger][:max_pool_size] %>;
 passenger_pool_idle_time <%= node[:rvm_passenger][:pool_idle_time] %>;
