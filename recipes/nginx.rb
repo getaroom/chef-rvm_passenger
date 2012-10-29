@@ -29,6 +29,12 @@ include_recipe "rvm_passenger"
 node.run_state['nginx_configure_flags'] =
   node.run_state['nginx_configure_flags'] | ["--add-module=#{node['rvm_passenger']['root_path']}/ext/nginx"]
 
+rvm_shell "Build Nginx helper agent" do
+  ruby_string  node['rvm_passenger']['rvm_ruby']
+  code         %{rake nginx RELEASE=yes}
+  cwd          node['rvm_passenger']['root_path']
+end
+
 template "#{node['nginx']['dir']}/conf.d/passenger.conf" do
   source    "passenger_nginx.conf.erb"
   owner     "root"
