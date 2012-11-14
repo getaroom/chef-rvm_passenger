@@ -30,6 +30,10 @@ default['rvm_passenger']['wrapper_prefix'] = "run"
 
 default['rvm_passenger']['max_pool_size'] = 6
 default['rvm_passenger']['pool_idle_time'] = 300
+default['rvm_passenger']['buffers'] = '8 16k'
+default['rvm_passenger']['buffer_size'] = '32k'
+
+
 
 case platform
 when "suse"
