@@ -38,6 +38,12 @@ end
 
 rvm_environment rvm_ruby
 
+rvm_gem "rack" do
+  ruby_string rvm_ruby
+  version node['rvm_passenger']['rack_version']
+  only_if { node['rvm_passenger']['rack_version'] }
+end
+
 rvm_gem "passenger" do
   ruby_string rvm_ruby
   version     passenger_version
