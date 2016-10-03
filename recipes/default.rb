@@ -36,7 +36,9 @@ Array(node['rvm_passenger']['common_pkgs']).each do |pkg|
   package pkg
 end
 
-rvm_environment rvm_ruby
+rvm_environment rvm_ruby do
+  not_if { ::File.exists?("/usr/local/rvm/environments/#{rvm_ruby}") }
+end
 
 rvm_gem "rack" do
   ruby_string rvm_ruby
@@ -49,10 +51,15 @@ rvm_gem "passenger" do
   version     passenger_version
 end
 
+wrappers = %w(passenger passenger-config passenger-memory-stats passenger-status)
+
 rvm_wrapper "passenger" do
   prefix node['rvm_passenger']['wrapper_prefix']
-  binaries %w(passenger passenger-config passenger-memory-stats passenger-status)
+  binaries wrappers
   ruby_string rvm_ruby
+  not_if do
+    wrappers.all? { |name| ::File.exists?(::File.join("/usr/local/rvm/wrappers/ruby-1.9.3-p327-railsexpress@passenger", name)) }
+  end
 end
 
 node.default['rvm_passenger']['root_path'] = "/usr/local/rvm/gems/#{node['rvm_passenger']['rvm_ruby']}/gems/passenger-#{node['rvm_passenger']['version']}"
