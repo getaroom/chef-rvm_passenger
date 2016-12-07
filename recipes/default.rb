@@ -58,7 +58,7 @@ rvm_wrapper "passenger" do
   binaries wrappers
   ruby_string rvm_ruby
   not_if do
-    wrappers.all? { |name| ::File.exists?(::File.join("/usr/local/rvm/wrappers/ruby-1.9.3-p327-railsexpress@passenger", name)) }
+    wrappers.all? { |name| ::File.exists?(::File.join("/usr/local/rvm/wrappers/#{rvm_ruby}", name)) }
   end
 end
 
